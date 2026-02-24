@@ -1,0 +1,166 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block meta %}
+
+<meta name="description" content="{{category.desc | truncatewords:155}}">
+
+
+{% endblock %}
+
+{% block title %}
+
+shopping cart -mocajo online shop
+
+{% endblock %}
+
+{% block content %}
+<section class="h-100 gradient-custom">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center my-4">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            {% if not cart_items %}
+<h5 class="mb-0">Your shopping cart is empty</h5>
+            <br>
+<p class="text-center">Please Click &nbsp; <a class="btn btn-success" href="{% url 'moc_app:index' %}">Here</a> &nbsp;To continue shopping</p>
+</div>
+
+{% else %}
+<h5 class="mb-0">Your shopping cart</h5>
+
+          </div>
+          <div class="card-body">
+            <!-- Single item -->
+            <div class="row">
+              {% for cart_item in cart_items %}
+              <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                <!-- Image -->
+                <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                  <img src="{{cart_item.product.img.url}}"
+                    class="w-100" alt="{{cart_item.product.img.url}}" />
+                  <a href="{{cart_item.product.get_url}}">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                  </a>
+                </div>
+                <!-- Image -->
+              </div>
+
+              <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                <!-- Data -->
+                <p><strong>{{cart_item.product.name}}</strong></p>
+                <p>SKU: {{cart_item.product.id}}</p>
+                <p>Price: {{cart_item.product.price}}</p>
+                <a href="{% url 'cart_app:cart_delete' cart_item.product.id %}" type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                  title="Remove item">
+                  <i class="fas fa-trash"></i>
+                </a>
+
+                <!-- Data -->
+              </div>
+
+              <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <!-- Quantity -->
+                <div class="d-flex mb-4" style="max-width: 300px">
+                  <a href="{% url 'cart_app:cart_remove' cart_item.product.id %}" class="btn btn-primary px-3 me-2">
+                    <i class="fas fa-minus"></i>
+                  </a>
+                  <div class="form-outline text-center">
+                    <p><strong>{{cart_item.quantity}}</strong></p>
+                  </div>
+{% if cart_item.quantity < cart_item.product.stock %}
+                  <a href="{% url 'cart_app:addcart' cart_item.product.id %}" class="btn btn-primary px-3 ms-2">
+                    <i class="fas fa-plus"></i>
+                  </a>
+                  {% endif %}
+                </div>
+                <!-- Quantity -->
+
+                <!-- Price -->
+                <p class="text-start text-md-center">
+                  <strong>Total: ₹{{cart_item.sub_total}}</strong>
+                </p>
+                <!-- Price -->
+              </div>
+                    <hr>
+              {% endfor %}
+
+            </div>
+            <!-- Single item -->
+
+            <hr class="my-4" />
+
+            <!-- Single item -->
+
+            <!-- Single item -->
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <p><strong>Check out</strong></p>
+            <p class="mb-0">Please Review your shopping Cart items Before proceeding with the order payment</p>
+            <a href="{% url 'moc_app:index' %}" class="btn btn-secondary btn-block my_button">Continue shopping</a>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body">
+            <p><strong>We accept</strong></p>
+            <img class="me-2" width="45px"
+              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+              alt="Visa" />
+            <img class="me-2" width="45px"
+              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+              alt="American Express" />
+            <img class="me-2" width="45px"
+              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+              alt="Mastercard" />
+            <img class="me-2" width="45px"
+              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.webp"
+              alt="PayPal acceptance mark" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Summary</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+                {% for cart_item in cart_items %}
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                {{cart_item.product.name}}
+                <span>{{cart_item.sub_total}}</span>
+              </li>
+                {% endfor %}
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                Shipping
+                <span>Free</span>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                <div>
+                  <strong>Total amount</strong>
+                  <strong>
+                    <p class="mb-0">(including VAT)</p>
+                  </strong>
+                </div>
+                <span><strong>₹{{total}}</strong></span>
+              </li>
+            </ul>
+
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+              Go to checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load static %}
+
+
+<div class="bg-dark">
+    <div class="container py-4">
+      <!-- Breadcrumb -->
+      <nav class="d-flex">
+        <h6 class="mb-0">
+          {% if category is None %}
+          <a href="{% url 'moc_app:index' %}" class="text-white-50">Home</a>
+          {% else %}
+          <a href="{% url 'moc_app:index' %}" class="text-white-50">Home</a>
+          <span class="text-white-50 mx-2"> > </span>
+          <a href="" class="text-white"><u>{{category.name}}</u></a> &nbsp;&nbsp;
+          {% endif %}
+          {% for i in links %}
+          <span class="text-white-50 mx-2"> |</span>
+          <a href="{{i.get_url}}" class="text-white"><u>&nbsp;{{i.name}}</u></a>
+
+          {% endfor %}
+
+        </h6>
+      </nav>
+      <!-- Breadcrumb -->
+    </div>
+  </div>

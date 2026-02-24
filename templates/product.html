@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block meta %}
+
+<meta name="description" content="{{product.desc | truncatewords:155}}">
+
+
+{% endblock %}
+
+{% block title %}
+
+{{product.name}} -mocajo online shop
+
+{% endblock %}
+{% block link %}<link href="{% static '/css/prstyle.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+  <body>
+    <main class="container">
+<div class="row my_pr_row">
+    <div class="">
+        <p><a href="{% url 'moc_app:index' %}">Home</a> | <a href="{{product.category.get_url}}">{{product.category}}</a> | {{product.name}} </p>
+    </div>
+</div>
+
+
+
+      <!-- Left Column / Headphones Image -->
+
+        <img  class="img-fluid pb-5  " src="{{product.img.url}}" alt="" style="height:500px; width:500px; padding-top:20px;">
+
+      <!-- Right Column -->
+      <div class="right-column ">
+
+        <!-- Product Description -->
+        <div class="product-description">
+
+          <h1>{{product.name}}</h1>
+          <p>{{product.desc}}</p>
+        </div>
+
+        <!-- Product Configuration -->
+
+
+        <!-- Product Pricing -->
+        <div class="product-price">
+          <span>₹{{product.price}}</span>
+          <a href="{% url 'cart_app:addcart' product.id %}" class="cart-btn">Add to cart</a>
+        </div>
+      </div>
+    </main>
+{% endblock %}
+    <!-- Scripts -->
+    {% block script %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
+
+    {% endblock %}

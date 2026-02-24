@@ -1,0 +1,54 @@
+{% load static %}
+
+    <header>
+  <!-- Jumbotron -->
+  <div class="py-3 text-center bg-white border-bottom">
+    <div class="container">
+      <div class="row gy-3">
+        <!-- Left elements -->
+        <div class="col-lg-2 col-sm-6 col-6 ">
+          <a href="{% url 'moc_app:index' %}" target="_blank" class="float-start shadow">
+            <img src="{% static 'img/log.png/' %}" height="35" />
+          </a>
+        </div>
+        <!-- Left elements -->
+
+        <!-- Center elements -->
+        <div class="order-lg-last col-lg-5 col-sm-6 col-6">
+          <div class="d-flex float-end shadow">
+
+            <a href="{% url 'cart_app:cartdetails' %}" class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank">
+              <i class="fas fa-shopping-cart m-1 me-md-2 "></i>
+              <p class="d-none d-md-block mb-0 ">{{item_count}}</p>
+            </a>
+          </div>
+        </div>
+        <!-- Center elements -->
+
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12">
+          <div class="input-group float-center">
+            <div class="form-outline">
+                    <form class="d-flex" role="search" action="{% url 'search_app:searchview' %}" method="get">
+          {% csrf_token %}
+              <input type="search" name="q" id="form1" class="form-control shadow" />
+              <label class="form-label" for="form1">Search</label>
+
+
+            <button type="submit" class="btn btn-primary shadow-0">
+              <i class="fas fa-search"></i>
+            </button>
+            </form>
+              </div>
+          </div>
+        </div>
+        <!-- Right elements -->
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+
+  <!-- Heading -->
+
+  <!-- Heading -->
+</header>
