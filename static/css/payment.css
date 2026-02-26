@@ -1,0 +1,120 @@
+/* =========================
+   Payment result pages
+   ========================= */
+
+.result-card{
+  max-width: 720px;
+  margin: 0 auto;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(2,6,23,.06);
+  border-radius: 24px;
+  box-shadow: 0 20px 55px rgba(2,6,23,.12);
+  overflow: hidden;
+}
+
+.result-body{
+  padding: 28px 18px;
+}
+
+.result-icon{
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+  border: 1px solid rgba(2,6,23,.06);
+  box-shadow: 0 16px 40px rgba(2,6,23,.10);
+}
+
+.result-icon i{
+  font-size: 1.6rem;
+  color: rgba(15,23,42,.90);
+}
+
+.result-icon.success{
+  background: rgba(168,187,163,.26);
+}
+
+.result-icon.danger{
+  background: rgba(239,68,68,.14);
+}
+
+.result-title{
+  font-weight: 1100;
+  margin-bottom: 6px;
+  letter-spacing: -.02em;
+  color: rgba(15,23,42,.95);
+}
+
+.result-sub{
+  color: rgba(15,23,42,.62);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.receipt{
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(168,187,163,.10);
+  border: 1px solid rgba(168,187,163,.30);
+  text-align: left;
+}
+
+.receipt-row{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(2,6,23,.12);
+}
+
+.receipt-row:last-child{
+  border-bottom: 0;
+}
+
+.receipt .label{
+  color: rgba(15,23,42,.62);
+  font-weight: 800;
+}
+
+.receipt .value{
+  color: rgba(15,23,42,.92);
+  font-weight: 1100;
+  text-align: right;
+  word-break: break-word;
+}
+
+.result-actions{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.result-note{
+  margin-top: 14px;
+  color: rgba(15,23,42,.55);
+  font-weight: 700;
+  font-size: .92rem;
+}
+
+/* Mobile */
+@media (max-width: 575.98px){
+  .result-body{
+    padding: 22px 14px;
+  }
+  .receipt{
+    padding: 10px 12px;
+  }
+  .receipt-row{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .receipt .value{
+    text-align: left;
+  }
+}

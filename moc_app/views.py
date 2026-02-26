@@ -1,8 +1,10 @@
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from moc_app.models import Category, Product
+from cart_app.models import Order, OrderItem
 
 
 # Create your views here.
@@ -25,7 +27,11 @@ def index(request,c_slug=None):
         products = pagenator.page(pagenator.num_pages)
 
 
-    return render(request,'index.html',{'category':c_page,'products':products})
+    return render(request,'index.html',{
+    'category': c_page,
+    'products': products,
+    'links': Category.objects.all(),
+})
 
 
 def product(request,c_slug,p_slug):
@@ -35,3 +41,18 @@ def product(request,c_slug,p_slug):
         raise e
 
     return render(request,'product.html',{'product':product})
+
+@login_required
+def my_orders(request):
+    # Adjust ordering field if you use created_at / ordered_at
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "my_orders.html", {"orders": orders})
+
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    # If your related_name differs, change `items` to your related_name
+    # Example: order.order_items.all()
+    items = getattr(order, "items").all() if hasattr(order, "items") else []
+    return render(request, "order_detail.html", {"order": order, "items": items})

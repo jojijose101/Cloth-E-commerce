@@ -1,166 +1,155 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block meta %}
-
-<meta name="description" content="{{category.desc | truncatewords:155}}">
-
-
-{% endblock %}
-
-{% block title %}
-
-shopping cart -mocajo online shop
-
-{% endblock %}
-
+{% block title %}Cart - Mocajo Fashion{% endblock %}
+{% block link %}<link rel="stylesheet" href="{% static 'css/cart.css' %}">  {% endblock %}
 {% block content %}
-<section class="h-100 gradient-custom">
-  <div class="container py-5">
-    <div class="row d-flex justify-content-center my-4">
-      <div class="col-md-8">
-        <div class="card mb-4">
-          <div class="card-header py-3">
-            {% if not cart_items %}
-<h5 class="mb-0">Your shopping cart is empty</h5>
-            <br>
-<p class="text-center">Please Click &nbsp; <a class="btn btn-success" href="{% url 'moc_app:index' %}">Here</a> &nbsp;To continue shopping</p>
-</div>
+<section class="py-3 py-lg-4">
+  <div class="container">
 
-{% else %}
-<h5 class="mb-0">Your shopping cart</h5>
+    <div class="section-head mb-3">
+      <h2 class="section-title">Your Cart</h2>
+      <p class="section-sub mb-0">Review items and proceed to checkout</p>
+    </div>
 
-          </div>
-          <div class="card-body">
-            <!-- Single item -->
-            <div class="row">
+    {% if not cart_items %}
+      <div class="empty-card">
+        <div class="empty-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <h4 class="mb-2">Your cart is empty</h4>
+        <p class="text-muted mb-4">Browse our latest collections and add items to your cart.</p>
+        <a class="btn btn-sage" href="{% url 'moc_app:index' %}">Start shopping</a>
+      </div>
+    {% else %}
+
+      <div class="row g-4 align-items-start">
+        <!-- CART LIST -->
+        <div class="col-lg-8">
+
+          <div class="cart-card">
+            <div class="cart-head">
+              <div>
+                <h5 class="mb-0">Cart items</h5>
+                <div class="cart-sub">Items: <b>{{ counter }}</b></div>
+              </div>
+
+              <a class="btn btn-sage-outline btn-sm" href="{% url 'moc_app:index' %}">
+                <i class="fas fa-arrow-left me-2"></i>Continue shopping
+              </a>
+            </div>
+
+            <div class="cart-body">
               {% for cart_item in cart_items %}
-              <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                <!-- Image -->
-                <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                  <img src="{{cart_item.product.img.url}}"
-                    class="w-100" alt="{{cart_item.product.img.url}}" />
-                  <a href="{{cart_item.product.get_url}}">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                <div class="cart-row">
+                  <a class="cart-img" href="{{ cart_item.product.get_url }}">
+                    <img src="{{ cart_item.product.img.url }}" alt="{{ cart_item.product.name }}">
                   </a>
-                </div>
-                <!-- Image -->
-              </div>
 
-              <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                <!-- Data -->
-                <p><strong>{{cart_item.product.name}}</strong></p>
-                <p>SKU: {{cart_item.product.id}}</p>
-                <p>Price: {{cart_item.product.price}}</p>
-                <a href="{% url 'cart_app:cart_delete' cart_item.product.id %}" type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                  title="Remove item">
-                  <i class="fas fa-trash"></i>
-                </a>
+                  <div class="cart-info">
+                    <a class="cart-name" href="{{ cart_item.product.get_url }}">{{ cart_item.product.name }}</a>
 
-                <!-- Data -->
-              </div>
+                    <div class="cart-meta">
+                      <span>₹{{ cart_item.product.price }}</span>
+                      <span class="dot">•</span>
+                      <span>SKU {{ cart_item.product.id }}</span>
+                    </div>
 
-              <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                <!-- Quantity -->
-                <div class="d-flex mb-4" style="max-width: 300px">
-                  <a href="{% url 'cart_app:cart_remove' cart_item.product.id %}" class="btn btn-primary px-3 me-2">
-                    <i class="fas fa-minus"></i>
-                  </a>
-                  <div class="form-outline text-center">
-                    <p><strong>{{cart_item.quantity}}</strong></p>
+                    <div class="cart-variant">
+                      {% if cart_item.size %}<span class="variant-pill">Size: {{ cart_item.size }}</span>{% endif %}
+                      {% if cart_item.color %}<span class="variant-pill">Color: {{ cart_item.color }}</span>{% endif %}
+                    </div>
+
+                    <a href="{% url 'cart_app:cart_delete' cart_item.id %}" class="remove-link">
+                      <i class="fas fa-trash me-1"></i>Remove
+                    </a>
                   </div>
-{% if cart_item.quantity < cart_item.product.stock %}
-                  <a href="{% url 'cart_app:addcart' cart_item.product.id %}" class="btn btn-primary px-3 ms-2">
-                    <i class="fas fa-plus"></i>
-                  </a>
-                  {% endif %}
-                </div>
-                <!-- Quantity -->
 
-                <!-- Price -->
-                <p class="text-start text-md-center">
-                  <strong>Total: ₹{{cart_item.sub_total}}</strong>
-                </p>
-                <!-- Price -->
-              </div>
-                    <hr>
+                  <div class="cart-controls">
+                    <div class="qty-stepper" role="group" aria-label="quantity">
+                      <a href="{% url 'cart_app:cart_remove' cart_item.id %}" class="qty-btn" aria-label="decrease">
+                        <i class="fas fa-minus"></i>
+                      </a>
+
+                      <div class="qty-count" aria-label="quantity">{{ cart_item.quantity }}</div>
+
+                      {% if cart_item.quantity < cart_item.product.stock %}
+                        <form action="{% url 'cart_app:addcart' cart_item.product.id %}" method="post" class="m-0">
+                          {% csrf_token %}
+                          <input type="hidden" name="size" value="{{ cart_item.size }}">
+                          <input type="hidden" name="color" value="{{ cart_item.color }}">
+                          <button class="qty-btn" type="submit" aria-label="increase">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </form>
+                      {% else %}
+                        <button class="qty-btn" type="button" disabled aria-label="no more stock">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      {% endif %}
+                    </div>
+
+                    <div class="line-total">
+                      <div class="line-price">₹{{ cart_item.sub_total }}</div>
+                      <div class="line-caption">Line total</div>
+                    </div>
+                  </div>
+                </div>
               {% endfor %}
 
+              <div class="cart-actions">
+                <a href="{% url 'moc_app:index' %}" class="btn btn-sage-outline">Continue shopping</a>
+                <a href="{% url 'cart_app:checkout' %}" class="btn btn-sage ms-auto">
+                  Checkout <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+              </div>
             </div>
-            <!-- Single item -->
-
-            <hr class="my-4" />
-
-            <!-- Single item -->
-
-            <!-- Single item -->
           </div>
         </div>
-        <div class="card mb-4">
-          <div class="card-body">
-            <p><strong>Check out</strong></p>
-            <p class="mb-0">Please Review your shopping Cart items Before proceeding with the order payment</p>
-            <a href="{% url 'moc_app:index' %}" class="btn btn-secondary btn-block my_button">Continue shopping</a>
-          </div>
-        </div>
-        <div class="card mb-4 mb-lg-0">
-          <div class="card-body">
-            <p><strong>We accept</strong></p>
-            <img class="me-2" width="45px"
-              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
-              alt="Visa" />
-            <img class="me-2" width="45px"
-              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
-              alt="American Express" />
-            <img class="me-2" width="45px"
-              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
-              alt="Mastercard" />
-            <img class="me-2" width="45px"
-              src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.webp"
-              alt="PayPal acceptance mark" />
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-header py-3">
-            <h5 class="mb-0">Summary</h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-group list-group-flush">
+
+        <!-- SUMMARY -->
+        <div class="col-lg-4">
+          <div class="summary-card">
+            <div class="summary-head">
+              <h5 class="mb-0">Order Summary</h5>
+            </div>
+
+            <div class="summary-body">
+              <div class="summary-list">
                 {% for cart_item in cart_items %}
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                {{cart_item.product.name}}
-                <span>{{cart_item.sub_total}}</span>
-              </li>
+                  <div class="summary-item">
+                    <div class="summary-name">
+                      {{ cart_item.product.name }}
+                      <span class="summary-qty">x{{ cart_item.quantity }}</span>
+                    </div>
+                    <div class="summary-price">₹{{ cart_item.sub_total }}</div>
+                  </div>
                 {% endfor %}
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                Shipping
-                <span>Free</span>
-              </li>
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-                <div>
-                  <strong>Total amount</strong>
-                  <strong>
-                    <p class="mb-0">(including VAT)</p>
-                  </strong>
-                </div>
-                <span><strong>₹{{total}}</strong></span>
-              </li>
-            </ul>
+              </div>
 
-            <button type="button" class="btn btn-primary btn-lg btn-block">
-              Go to checkout
-            </button>
+              <div class="summary-line">
+                <span>Shipping</span>
+                <span class="free">Free</span>
+              </div>
+
+              <div class="summary-total">
+                <span>Total</span>
+                <span>₹{{ total }}</span>
+              </div>
+
+              <a href="{% url 'cart_app:checkout' %}" class="btn btn-sage w-100 mt-3">
+                Go to checkout
+              </a>
+
+              <div class="summary-note">
+                Secure checkout • Fast delivery • Easy returns
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
-    </div>
+    {% endif %}
   </div>
 </section>
-{% endif %}
 {% endblock %}

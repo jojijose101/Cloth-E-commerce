@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - Mocajo Fashion{% endblock %}
+{% block link %}<link rel="stylesheet" href="{% static 'css/checkout.css' %}">  {% endblock %}
+{% block content %}
+<section class="py-3 py-lg-4">
+  <div class="container">
+    {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          {% if error %}
+            <div class="alert alert-danger mb-3">{{ error }}</div>
+          {% endif %}
+
+    <div class="section-head mb-3">
+      <h2 class="section-title">Checkout</h2>
+      <p class="section-sub mb-0">Delivery details & secure payment</p>
+    </div>
+
+    <div class="row g-4 align-items-start">
+      <!-- LEFT: FORM + PAYMENT -->
+      <div class="col-lg-7">
+
+        <div class="co-card">
+          <div class="co-head">
+            <h5 class="mb-0">Delivery details</h5>
+          </div>
+
+          <div class="co-body">
+            {% if error %}
+              <div class="alert alert-danger mb-3">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" id="checkout-form">
+              {% csrf_token %}
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label co-label">Full name *</label>
+                  <input name="full_name" class="form-control co-input" required
+                         value="{{ form_data.full_name|default_if_none:'' }}">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label co-label">Phone *</label>
+                  <input name="phone" class="form-control co-input" required
+                         value="{{ form_data.phone|default_if_none:'' }}">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label co-label">Email</label>
+                  <input name="email" type="email" class="form-control co-input"
+                         value="{{ form_data.email|default_if_none:'' }}">
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label co-label">Address *</label>
+                  <textarea name="address" class="form-control co-input" rows="3" required>{{ form_data.address|default_if_none:'' }}</textarea>
+                </div>
+
+                <!-- Payment method -->
+                <div class="col-12">
+                  <label class="form-label co-label">Payment method *</label>
+
+                  <div class="pay-grid">
+                    <label class="pay-tile">
+                      <input class="pay-radio" type="radio" name="payment_method" value="online"
+                             {% if form_data.payment_method == "online" or not form_data.payment_method %}checked{% endif %}>
+                      <div class="pay-inner">
+                        <div class="pay-title">
+                          <span class="pay-dot"></span>
+                          Online (Razorpay)
+                        </div>
+                        <div class="pay-sub">UPI • Card • Netbanking • Wallet</div>
+                      </div>
+                    </label>
+
+                    <label class="pay-tile">
+                      <input class="pay-radio" type="radio" name="payment_method" value="cod"
+                             {% if form_data.payment_method == "cod" %}checked{% endif %}>
+                      <div class="pay-inner">
+                        <div class="pay-title">
+                          <span class="pay-dot"></span>
+                          Cash on Delivery (COD)
+                        </div>
+                        <div class="pay-sub">Pay when your order arrives</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="co-actions">
+                <a href="{% url 'cart_app:cartdetails' %}" class="btn btn-sage-outline">
+                  <i class="fas fa-arrow-left me-2"></i>Back to cart
+                </a>
+
+                <button type="submit" class="btn btn-sage ms-auto" {% if not gateway_enabled %}disabled{% endif %}>
+                  Continue <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+              </div>
+
+              {% if not gateway_enabled %}
+                <div class="co-note mt-3">
+                  Payment gateway is not configured. Add <code>RAZORPAY_KEY_ID</code> and <code>RAZORPAY_KEY_SECRET</code> in settings/environment.
+                </div>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+
+        {% if order and razorpay_order_id %}
+          <div class="co-card mt-4">
+            <div class="co-head">
+              <h5 class="mb-0">Pay securely</h5>
+            </div>
+
+            <div class="co-body">
+              <p class="text-muted mb-3">Click below to complete payment for <b>₹{{ total }}</b>.</p>
+
+              <button id="rzp-button" class="btn btn-sage w-100 co-paybtn">
+                Pay ₹{{ total }}
+              </button>
+
+              <form id="rzp-verify-form" action="{% url 'cart_app:verify_payment' %}" method="post" class="d-none">
+                {% csrf_token %}
+                <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+                <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+              </form>
+
+              <div class="co-secure">
+                <i class="fas fa-lock me-2"></i> Payments are processed securely via Razorpay
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+      </div>
+
+      <!-- RIGHT: SUMMARY -->
+      <div class="col-lg-5">
+        <div class="sum-card">
+          <div class="sum-head">
+            <h5 class="mb-0">Order summary</h5>
+          </div>
+
+          <div class="sum-body">
+            <div class="sum-items">
+              {% for item in cart_items %}
+                <div class="sum-item">
+                  <div class="sum-left">
+                    <div class="sum-name">{{ item.product.name }}</div>
+                    <div class="sum-meta">
+                      Qty: {{ item.quantity }}
+                      {% if item.size %} • Size: {{ item.size }}{% endif %}
+                      {% if item.color %} • Color: {{ item.color }}{% endif %}
+                    </div>
+                  </div>
+                  <div class="sum-price">₹{{ item.sub_total }}</div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="sum-line">
+              <span>Shipping</span>
+              <span class="free">Free</span>
+            </div>
+
+            <div class="sum-total">
+              <span>Total</span>
+              <span>₹{{ total }}</span>
+            </div>
+
+            <div class="sum-note">
+              By placing this order you agree to our terms and return policy.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block script %}
+  {% if order and razorpay_order_id %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      (function(){
+        var options = {
+          key: "{{ razorpay_key_id }}",
+          amount: "{{ razorpay_amount }}",
+          currency: "{{ razorpay_currency }}",
+          name: "Mocajo Fashion",
+          description: "Order #{{ order.id }}",
+          order_id: "{{ razorpay_order_id }}",
+          handler: function (response){
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+            document.getElementById('razorpay_signature').value = response.razorpay_signature;
+            document.getElementById('rzp-verify-form').submit();
+          },
+          theme: { color: "#A8BBA3" }
+        };
+        var rzp = new Razorpay(options);
+        document.getElementById('rzp-button').onclick = function(e){
+          rzp.open();
+          e.preventDefault();
+        }
+      })();
+    </script>
+  {% endif %}
+{% endblock %}

@@ -17,3 +17,6 @@ class ProductForm(admin.ModelAdmin):
     list_per_page = 20
 admin.site.register(Product,ProductForm)
 
+admin.site.site_header = "Clothy Admin Portal"  # text in header of admin page
+admin.site.site_title = "Clothy Admin Portal"   # text in browser tab
+admin.site.index_title = "Dashboard"      

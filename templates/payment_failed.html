@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Payment Failed - Mocajo Fashion{% endblock %}
+{% block link %}<link rel="stylesheet" href="{% static 'css/payment_result.css' %}">  {% endblock %}
+{% block content %}
+<section class="py-3 py-lg-5">
+  <div class="container">
+
+    <div class="result-card">
+      <div class="result-body text-center">
+
+        <div class="result-icon danger">
+          <i class="fas fa-times"></i>
+        </div>
+
+        <h3 class="result-title">Payment Failed</h3>
+        <p class="result-sub">
+          {{ message|default:"We couldn't verify your payment. Please try again." }}
+        </p>
+
+        <div class="result-actions">
+          <a class="btn btn-sage" href="{% url 'cart_app:checkout' %}">
+            Try again <i class="fas fa-redo ms-2"></i>
+          </a>
+          <a class="btn btn-sage-outline" href="{% url 'cart_app:cartdetails' %}">
+            Back to cart
+          </a>
+        </div>
+
+        <div class="result-note">
+          Tip: If money was deducted, it’s usually auto-refunded within your bank’s timeline.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

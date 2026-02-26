@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login - Mocajo{% endblock %}
+{% block link %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">  {% endblock %}
+
+{% block content %}
+<section class="auth-wrap py-3 py-lg-5">
+  <div class="container">
+    <div class="auth-grid">
+
+      <!-- Left (brand / message) -->
+      <div class="auth-side d-none d-lg-block">
+        <div class="auth-side-card">
+          <div class="auth-badge">
+            <span></span> Mocajo Fashion
+          </div>
+
+          <h2 class="auth-title">Welcome back.</h2>
+          <p class="auth-sub">
+            Sign in to continue shopping, track orders, and manage your account.
+          </p>
+
+          <div class="auth-points">
+            <div class="auth-point"><i class="fas fa-shield-alt"></i> Secure login</div>
+            <div class="auth-point"><i class="fas fa-truck"></i> Track your orders</div>
+            <div class="auth-point"><i class="fas fa-sync-alt"></i> Easy returns</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right (form) -->
+      <div class="auth-card">
+        <div class="auth-card-head">
+          <h3 class="mb-1">Login</h3>
+          <p class="text-muted mb-0">Enter your credentials to continue</p>
+        </div>
+
+        <div class="auth-card-body">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          {% if error %}
+            <div class="alert alert-danger mb-3">{{ error }}</div>
+          {% endif %}
+
+          <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label co-label">Username</label>
+              <input name="username" class="form-control co-input" placeholder="Enter username" required>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label co-label">Password</label>
+              <input name="password" type="password" class="form-control co-input" placeholder="Enter password" required>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <label class="remember-me">
+                <input type="checkbox" name="remember">
+                <span>Remember me</span>
+              </label>
+
+              {# If you have a forgot password URL, enable this #}
+              {# <a class="auth-link" href="{% url 'auth_app:forgot_password' %}">Forgot password?</a> #}
+            </div>
+
+            <button type="submit" class="btn btn-sage w-100 mt-3">
+              Login <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+          </form>
+
+          <div class="auth-divider">
+            <span>New here?</span>
+          </div>
+
+          <a href="{% url 'auth_app:signup' %}" class="btn btn-sage-outline w-100">
+            Create account
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

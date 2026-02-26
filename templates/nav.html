@@ -1,26 +1,91 @@
 {% load static %}
 
+<nav class="navbar navbar-expand-lg sticky-top site-nav">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="{% url 'moc_app:index' %}">
+      <img src="{% static 'img/log.png' %}" alt="Clothy" width="34" height="34" class="rounded-circle">
+      <span class="brand-text">Clothy</span>
+    </a>
 
-<div class="bg-dark">
-    <div class="container py-4">
-      <!-- Breadcrumb -->
-      <nav class="d-flex">
-        <h6 class="mb-0">
-          {% if category is None %}
-          <a href="{% url 'moc_app:index' %}" class="text-white-50">Home</a>
-          {% else %}
-          <a href="{% url 'moc_app:index' %}" class="text-white-50">Home</a>
-          <span class="text-white-50 mx-2"> > </span>
-          <a href="" class="text-white"><u>{{category.name}}</u></a> &nbsp;&nbsp;
-          {% endif %}
-          {% for i in links %}
-          <span class="text-white-50 mx-2"> |</span>
-          <a href="{{i.get_url}}" class="text-white"><u>&nbsp;{{i.name}}</u></a>
+    <!-- Mobile toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+      aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-          {% endfor %}
+    <!-- Nav -->
+    <div class="collapse navbar-collapse" id="mainNav">
 
-        </h6>
-      </nav>
-      <!-- Breadcrumb -->
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'moc_app:index' %}">Home</a>
+        </li>
+
+        {% if links %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-sage">
+            {% for i in links %}
+              <li><a class="dropdown-item" href="{{ i.get_url }}">{{ i.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+
+      <!-- Search -->
+      <form class="d-flex me-lg-3 mb-3 mb-lg-0" method="get" action="{% url 'search_app:searchview' %}">
+        <input class="form-control form-control-sm me-2 site-input" type="search" name="q"
+               placeholder="Search products..." aria-label="Search">
+        <button class="btn btn-sm btn-sage" type="submit">Search</button>
+      </form>
+
+      <!-- Right links -->
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+
+        <!-- Cart -->
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="{% url 'cart_app:cartdetails' %}">
+            <i class="fas fa-shopping-bag me-1"></i> Cart
+            {% if item_count and item_count > 0 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-sage">
+                {{ item_count }}
+              </span>
+            {% endif %}
+          </a>
+        </li>
+
+        <!-- My Orders -->
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'moc_app:my_orders' %}">My Orders</a>
+        </li>
+        {% endif %}
+
+        <!-- Auth -->
+        {% if request.user.is_authenticated %}
+          <li class="nav-item d-none d-lg-inline">
+            <span class="navbar-text small text-muted">
+              Hi, <span class="fw-bold text-dark">{{ request.user.username }}</span>
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-sm btn-sage-outline ms-lg-2" href="{% url 'auth_app:logout' %}">Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="btn btn-sm btn-sage-outline" href="{% url 'auth_app:login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-sm btn-sage ms-lg-2" href="{% url 'auth_app:signup' %}">Sign Up</a>
+          </li>
+        {% endif %}
+      </ul>
+
     </div>
   </div>
+</nav>

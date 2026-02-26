@@ -22,9 +22,10 @@ from moc_project import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index',include('moc_app.urls')),
-    path('search',include('search_app.urls')),
-    path('cart',include('cart_app.urls'))
+    path('home/',include('moc_app.urls')),
+    path('auth/',include('auth_app.urls')),
+    path('search/',include('search_app.urls')),
+    path('cart/',include('cart_app.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

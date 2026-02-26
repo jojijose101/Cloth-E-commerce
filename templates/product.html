@@ -1,58 +1,113 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load extras %}
 
 {% block meta %}
-
-<meta name="description" content="{{product.desc | truncatewords:155}}">
-
-
+<meta name="description" content="{{ product.desc|truncatewords:155 }}">
 {% endblock %}
 
 {% block title %}
-
-{{product.name}} -mocajo online shop
-
+{{ product.name }} - Mocajo Fashion
 {% endblock %}
-{% block link %}<link href="{% static '/css/prstyle.css' %}" rel="stylesheet">{% endblock %}
+
+{% block link %}<link rel="stylesheet" href="{% static 'css/product.css' %}">  {% endblock %}
 {% block content %}
-  <body>
-    <main class="container">
-<div class="row my_pr_row">
-    <div class="">
-        <p><a href="{% url 'moc_app:index' %}">Home</a> | <a href="{{product.category.get_url}}">{{product.category}}</a> | {{product.name}} </p>
-    </div>
-</div>
+<section class="py-3 py-lg-4">
+  <div class="container">
 
+    <!-- Breadcrumb -->
+    <nav class="site-breadcrumb mb-3" aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'moc_app:index' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ product.category.get_url }}">{{ product.category }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+      </ol>
+    </nav>
 
+    <div class="row g-4 align-items-start">
 
-      <!-- Left Column / Headphones Image -->
-
-        <img  class="img-fluid pb-5  " src="{{product.img.url}}" alt="" style="height:500px; width:500px; padding-top:20px;">
-
-      <!-- Right Column -->
-      <div class="right-column ">
-
-        <!-- Product Description -->
-        <div class="product-description">
-
-          <h1>{{product.name}}</h1>
-          <p>{{product.desc}}</p>
-        </div>
-
-        <!-- Product Configuration -->
-
-
-        <!-- Product Pricing -->
-        <div class="product-price">
-          <span>₹{{product.price}}</span>
-          <a href="{% url 'cart_app:addcart' product.id %}" class="cart-btn">Add to cart</a>
+      <!-- Image -->
+      <div class="col-lg-6">
+        <div class="pd-media-card">
+          <img class="pd-image" src="{{ product.img.url }}" alt="{{ product.name }}">
         </div>
       </div>
-    </main>
-{% endblock %}
-    <!-- Scripts -->
-    {% block script %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
 
-    {% endblock %}
+      <!-- Details -->
+      <div class="col-lg-6">
+        <div class="pd-panel">
+
+          <div class="pd-head">
+            <h1 class="pd-title">{{ product.name }}</h1>
+
+            <div class="pd-meta">
+              {% if product.brand %}<span class="pd-chip">Brand: <b>{{ product.brand }}</b></span>{% endif %}
+              {% if product.material %}<span class="pd-chip">Material: <b>{{ product.material }}</b></span>{% endif %}
+            </div>
+
+            <div class="pd-price-row">
+              <div class="pd-price">₹{{ product.price }}</div>
+
+              <span class="pd-stock {% if product.stock > 0 %}in{% else %}out{% endif %}">
+                {% if product.stock > 0 %}In stock{% else %}Out of stock{% endif %}
+              </span>
+            </div>
+          </div>
+
+          <div class="pd-desc">
+            <p class="mb-0">{{ product.desc }}</p>
+          </div>
+
+          <form action="{% url 'cart_app:addcart' product.id %}" method="post" class="pd-form mt-3">
+            {% csrf_token %}
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label pd-label">Size</label>
+                <select name="size" class="form-select pd-select">
+                  {% if product.sizes %}
+                    {% for s in product.sizes|split:"," %}
+                      <option value="{{ s }}">{{ s }}</option>
+                    {% endfor %}
+                  {% else %}
+                    <option value="">One size</option>
+                  {% endif %}
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label pd-label">Color</label>
+                <select name="color" class="form-select pd-select">
+                  {% if product.colors %}
+                    {% for c in product.colors|split:"," %}
+                      <option value="{{ c }}">{{ c }}</option>
+                    {% endfor %}
+                  {% else %}
+                    <option value="">Default</option>
+                  {% endif %}
+                </select>
+              </div>
+            </div>
+
+            <div class="pd-actions mt-4">
+              <button class="btn btn-sage flex-fill" type="submit" {% if product.stock <= 0 %}disabled{% endif %}>
+                <i class="fas fa-shopping-cart me-2"></i>Add to cart
+              </button>
+
+              <a class="btn btn-sage-outline" href="{% url 'cart_app:cartdetails' %}">
+                View cart
+              </a>
+            </div>
+
+            <div class="pd-tip">
+              Tip: Select size & color before adding to cart.
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

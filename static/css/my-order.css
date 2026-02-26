@@ -1,0 +1,101 @@
+/* =========================
+   Order detail page
+   ========================= */
+
+.od-card{
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(2,6,23,.06);
+  border-radius: 20px;
+  box-shadow: 0 16px 45px rgba(2,6,23,.10);
+  padding: 14px 14px;
+  height: 100%;
+}
+
+.od-label{
+  color: rgba(15,23,42,.58);
+  font-weight: 800;
+  font-size: .88rem;
+  margin-bottom: 6px;
+}
+
+.od-value{ display: flex; align-items: center; gap: 8px; }
+.od-total{
+  font-weight: 1200;
+  font-size: 1.2rem;
+  color: rgba(15,23,42,.95);
+}
+.od-rzp{
+  font-weight: 900;
+  color: rgba(15,23,42,.78);
+  word-break: break-word;
+}
+
+.od-panel{
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(2,6,23,.06);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(2,6,23,.10);
+  overflow: hidden;
+}
+
+.od-panel-head{
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(2,6,23,.06);
+  background: rgba(255,255,255,.96);
+}
+
+.od-panel-body{
+  padding: 14px 16px 16px;
+}
+
+.od-table thead th{
+  background: transparent;
+  border-bottom: 1px solid rgba(2,6,23,.06);
+  color: rgba(15,23,42,.72);
+  font-weight: 1000;
+  font-size: .9rem;
+}
+.od-table tbody td{
+  border-top: 1px solid rgba(2,6,23,.06);
+  padding: 14px 10px;
+}
+.od-table tbody tr:hover{
+  background: rgba(168,187,163,.08);
+}
+
+/* Mobile item cards */
+.od-item{
+  background: rgba(255,255,255,.94);
+  border: 1px solid rgba(2,6,23,.06);
+  border-radius: 20px;
+  box-shadow: 0 14px 40px rgba(2,6,23,.08);
+  padding: 14px 14px;
+}
+
+.od-item-row{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* Payment method pill */
+.pm-pill{
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 1100;
+  font-size: .82rem;
+  border: 1px solid rgba(2,6,23,.06);
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+
+.pm-cod{
+  background: rgba(168,187,163,.18);
+  color: rgba(15,23,42,.86);
+}
+
+.pm-online{
+  background: rgba(59,130,246,.12);
+  color: rgba(30,64,175,.95);
+}

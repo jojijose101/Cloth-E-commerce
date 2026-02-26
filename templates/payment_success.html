@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Successful - Mocajo Fashion{% endblock %}
+{% block link %}<link rel="stylesheet" href="{% static 'css/payment_result.css' %}">{% endblock %}
+{% block content %}
+<section class="py-3 py-lg-5">
+  <div class="container">
+
+    <div class="result-card">
+      <div class="result-body text-center">
+
+        <div class="result-icon success">
+          <i class="fas fa-check"></i>
+        </div>
+
+        <h3 class="result-title">Payment Successful</h3>
+        <p class="result-sub">Your order has been placed successfully.</p>
+
+        <div class="receipt">
+          <div class="receipt-row">
+            <span class="label">Order ID</span>
+            <span class="value">#{{ order.id }}</span>
+          </div>
+          <div class="receipt-row">
+            <span class="label">Amount</span>
+            <span class="value">₹{{ order.total_amount }}</span>
+          </div>
+          <div class="receipt-row">
+            <span class="label">Payment ID</span>
+            <span class="value">{{ order.razorpay_payment_id }}</span>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <a class="btn btn-sage" href="{% url 'moc_app:index' %}">
+            Continue shopping <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+          <a class="btn btn-sage-outline" href="{% url 'moc_app:my_orders' %}">
+            View orders
+          </a>
+        </div>
+
+        <div class="result-note">
+          Need help? Contact support with your Order ID.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

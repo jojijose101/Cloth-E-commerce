@@ -1,0 +1,87 @@
+/* =========================
+   My Orders page
+   ========================= */
+
+.orders-card{
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(2,6,23,.06);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(2,6,23,.10);
+  overflow: hidden;
+}
+
+.orders-table{
+  margin: 0;
+}
+.orders-table thead th{
+  background: rgba(255,255,255,.96);
+  border-bottom: 1px solid rgba(2,6,23,.06);
+  color: rgba(15,23,42,.72);
+  font-weight: 1000;
+  font-size: .9rem;
+}
+.orders-table tbody td{
+  border-top: 1px solid rgba(2,6,23,.06);
+  padding: 14px 14px;
+}
+.orders-table tbody tr:hover{
+  background: rgba(168,187,163,.08);
+}
+
+/* Status pills */
+.status-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 1000;
+  font-size: .82rem;
+  border: 1px solid rgba(2,6,23,.06);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  background: rgba(168,187,163,.12);
+  color: rgba(15,23,42,.82);
+}
+
+/* optional mapping */
+.status-placed{ background: rgba(168,187,163,.18); }
+.status-packed{ background: rgba(168,187,163,.22); }
+.status-shipped{ background: rgba(59,130,246,.12); }
+.status-delivered{ background: rgba(16,185,129,.14); }
+.status-cancelled{ background: rgba(239,68,68,.14); }
+
+/* Payment pill */
+.pay-pill{
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 1100;
+  font-size: .82rem;
+  border: 1px solid rgba(2,6,23,.06);
+  letter-spacing: .4px;
+}
+.pay-pill.paid{
+  background: rgba(16,185,129,.14);
+  color: rgba(6,95,70,.95);
+}
+.pay-pill.pending{
+  background: rgba(245,158,11,.14);
+  color: rgba(146,64,14,.95);
+}
+
+/* Mobile card */
+.order-mini{
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(2,6,23,.06);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(2,6,23,.10);
+  padding: 14px 14px;
+}
+
+.mini-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}

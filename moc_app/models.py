@@ -25,6 +25,12 @@ class Product(models.Model):
     img = models.ImageField(upload_to='product')
     price = models.DecimalField(max_digits=10,decimal_places=2)
     stock = models.IntegerField()
+    # Clothing-specific metadata (kept simple to avoid complex variant tables)
+    # Store comma-separated values like: "S,M,L,XL" and "Black,Blue,Red"
+    sizes = models.CharField(max_length=120, blank=True, help_text='Comma-separated sizes e.g. S,M,L,XL')
+    colors = models.CharField(max_length=120, blank=True, help_text='Comma-separated colors e.g. Black,Blue,Red')
+    brand = models.CharField(max_length=120, blank=True)
+    material = models.CharField(max_length=120, blank=True)
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
